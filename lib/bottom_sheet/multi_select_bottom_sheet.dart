@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../util/multi_select_item.dart';
+
 import '../util/multi_select_actions.dart';
+import '../util/multi_select_item.dart';
 import '../util/multi_select_list_type.dart';
 
 /// A bottom sheet widget containing either a classic checkbox style list, or a chip style list.
@@ -29,6 +30,9 @@ class MultiSelectBottomSheet<T> extends StatefulWidget
 
   /// Text on the cancel button.
   final Text? cancelText;
+
+  /// Toggles bottom buttons presence.
+  final bool bottomButtonEnabled;
 
   /// An enum that determines which type of list to render.
   final MultiSelectListType? listType;
@@ -88,6 +92,7 @@ class MultiSelectBottomSheet<T> extends StatefulWidget
     this.listType,
     this.cancelText,
     this.confirmText,
+    this.bottomButtonEnabled = true,
     this.searchable = false,
     this.selectedColor,
     this.initialChildSize,
@@ -320,52 +325,53 @@ class _MultiSelectBottomSheetState<T> extends State<MultiSelectBottomSheet<T>> {
                         ),
                       ),
               ),
-              Container(
-                padding: EdgeInsets.all(2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () {
-                          widget.onCancelTap(context, widget.initialValue);
-                        },
-                        child: widget.cancelText ??
-                            Text(
-                              "CANCEL",
-                              style: TextStyle(
-                                color: (widget.selectedColor != null &&
-                                        widget.selectedColor !=
-                                            Colors.transparent)
-                                    ? widget.selectedColor!.withOpacity(1)
-                                    : Theme.of(context).primaryColor,
+              if (widget.bottomButtonEnabled)
+                Container(
+                  padding: EdgeInsets.all(2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            widget.onCancelTap(context, widget.initialValue);
+                          },
+                          child: widget.cancelText ??
+                              Text(
+                                "CANCEL",
+                                style: TextStyle(
+                                  color: (widget.selectedColor != null &&
+                                          widget.selectedColor !=
+                                              Colors.transparent)
+                                      ? widget.selectedColor!.withOpacity(1)
+                                      : Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: TextButton(
-                        onPressed: () {
-                          widget.onConfirmTap(
-                              context, _selectedValues, widget.onConfirm);
-                        },
-                        child: widget.confirmText ??
-                            Text(
-                              "OK",
-                              style: TextStyle(
-                                color: (widget.selectedColor != null &&
-                                        widget.selectedColor !=
-                                            Colors.transparent)
-                                    ? widget.selectedColor!.withOpacity(1)
-                                    : Theme.of(context).primaryColor,
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            widget.onConfirmTap(
+                                context, _selectedValues, widget.onConfirm);
+                          },
+                          child: widget.confirmText ??
+                              Text(
+                                "OK",
+                                style: TextStyle(
+                                  color: (widget.selectedColor != null &&
+                                          widget.selectedColor !=
+                                              Colors.transparent)
+                                      ? widget.selectedColor!.withOpacity(1)
+                                      : Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
             ],
           );
         },
